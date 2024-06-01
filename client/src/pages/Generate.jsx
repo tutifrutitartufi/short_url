@@ -24,7 +24,7 @@ const InputText = styled.input.attrs({
 `;
 
 const Button = styled.button.attrs({
-  className: `btn btn-primary`,
+  className: `btn btn-secondary`,
 })`
   margin: 15px 15px 15px 5px;
 `;
@@ -35,6 +35,7 @@ class Generate extends Component {
 
     this.state = {
       domain: "",
+      short_url: "",
     };
   }
 
@@ -46,11 +47,16 @@ class Generate extends Component {
   handleCreateUrl = async () => {
     const { domain } = this.state;
     const payload = { domain };
-    if (domain.startsWith("www.")) {
+    if (
+      domain.startsWith("www") ||
+      domain.startsWith("http") ||
+      domain.startsWith("https")
+    ) {
       await api.createUrl(payload).then((res) => {
-        window.alert(`Short url created: ${res?.data?.short_url}`);
+        const short_url = res?.data?.short_url;
         this.setState({
           domain,
+          short_url,
         });
       });
     } else {
@@ -59,7 +65,7 @@ class Generate extends Component {
   };
 
   render() {
-    const { domain } = this.state;
+    const { domain, short_url } = this.state;
     return (
       <Wrapper>
         <Title>Generate</Title>
@@ -72,6 +78,14 @@ class Generate extends Component {
         />
 
         <Button onClick={this.handleCreateUrl}>Add Url</Button>
+        <span>
+          {short_url && `Your short url link is: ${short_url}`}{" "}
+          {short_url && (
+            <Button onClick={navigator.clipboard.writeText(short_url)}>
+              Copy to clipboard
+            </Button>
+          )}
+        </span>
       </Wrapper>
     );
   }

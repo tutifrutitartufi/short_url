@@ -19,7 +19,10 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 app.all("/:slug", async (req, res) => {
   const slug = req.params.slug;
   const url = await get_short_url_and_increase_rating(slug);
-  const domain = "https://" + url?.domain;
+  let domain = url?.domain;
+  if (!url?.domain.indexOf("https://") && !url?.domain.indexOf("http://")) {
+    domain = "https://" + url?.domain;
+  }
   res.redirect(domain);
 });
 

@@ -23,7 +23,7 @@ There are 4 containers:
 1. Client (localhost:3000)
 2. Server (localhost:8000)
 3. Mongo (localhost:27017)
-4. MongoViewer (localhost:8081) -> UI for Mongo DB
+4. MongoViewer (localhost:8081) -> UI for Mongo DB (username: admin password: pass)
 
 You will need to have Docker installed.
 In root of project just 'docker-compose up'
