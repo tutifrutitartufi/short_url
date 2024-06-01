@@ -1,0 +1,54 @@
+version: "3"
+services:
+  client:
+    build:
+      context: client
+    stdin_open: true
+    ports:
+      - "3000:3000"
+    networks:
+      - short-url
+    volumes:
+      - ./client/:/usr/src/app
+      - /usr/src/app/node_modules
+  server:
+    build:
+      context: server
+    env_file: ./server/config/.env
+    ports:
+      - "8000:8000"
+    networks:
+      - short-url
+    volumes:
+      - ./server/:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - mongo
+    restart: always
+  mongo:
+    image: mongo:4.4
+    ports:
+      - "27017:27017"
+    networks:
+      - short-url
+    restart: always
+
+  mongoexpress:
+    image: mongo-express
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_MONGODB_URL: "mongo://admin:pass@mongo:27017/"
+    depends_on:
+      - mongo
+    networks:
+      - short-url
+    restart: always
+
+networks:
+  short-url:
+    driver: bridge
+volumes:
+  mongo-data:
+    driver: local
