@@ -10,7 +10,7 @@ const createUrl = async (req, res) => {
     });
   }
 
-  const url = await create_url(body?.long_url);
+  const url = await create_url(body?.domain);
 
   if (!url) {
     return res.status(400).json({ success: false, error: err });

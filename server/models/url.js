@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const url_schema = new Schema(
   {
-    long_url: { type: String, required: true },
+    domain: { type: String, required: true },
     short_url: { type: String, required: true, default: "" },
     rating: { type: Number, required: true, default: 0 },
   },
@@ -17,25 +17,25 @@ const generate_hash = (url) => {
   return crypto.createHash("md5").update(url).digest("hex").slice(0, 6);
 };
 
-const create_short_url = async (long_url) => {
-  return generate_hash(long_url);
+const create_short_url = async (domain) => {
+  return generate_hash(domain);
 };
 
-const check_long_url_exists = async (long_url) => {
-  return await url_model.findOne({ long_url: long_url });
+const check_domain_exists = async (domain) => {
+  return await url_model.findOne({ domain });
 };
 
-const create_url = async (long_url) => {
+const create_url = async (domain) => {
   try {
-    let existing_url = await check_long_url_exists(long_url);
+    let existing_url = await check_domain_exists(domain);
     if (existing_url) {
       console.log("URL already exists:", existing_url);
       return existing_url;
     }
 
-    const short_url = await create_short_url(long_url);
+    const short_url = await create_short_url(domain);
     return new url_model({
-      long_url: long_url,
+      domain: domain,
       short_url: `${process.env.HOST}:${process.env.PORT}/${short_url}`,
       rating: 0,
     });

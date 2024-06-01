@@ -32,8 +32,8 @@ class Admin extends Component {
         filterable: true,
       },
       {
-        Header: "Long Url",
-        accessor: "long_url",
+        Header: "Domain",
+        accessor: "domain",
         filterable: true,
       },
       {

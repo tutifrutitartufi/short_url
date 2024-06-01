@@ -19,8 +19,8 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 app.all("/:slug", async (req, res) => {
   const slug = req.params.slug;
   const url = await get_short_url_and_increase_rating(slug);
-  const long_url = "https://" + url?.long_url;
-  res.redirect(long_url);
+  const domain = "https://" + url?.domain;
+  res.redirect(domain);
 });
 
 app.use("/api", url);
